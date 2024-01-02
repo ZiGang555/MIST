@@ -8,7 +8,7 @@ from runtime.evaluate import evaluate
 def get_eval_args():
     p = ArgParser(formatter_class=ArgumentDefaultsHelpFormatter)
 
-    p.arg("--data-json", type=str, help="Path to dataset JSON file")
+    p.arg("--data-json", type=str, default='results/config.json',help="Path to dataset JSON file")
     p.arg("--paths", type=str, help="Path to CSV or JSON file with original mask/data")
     p.arg("--preds-dir", type=str, help="Path to directory containing predictions")
     p.arg("--output-csv", type=str, help="Path to CSV containing evaluation results")

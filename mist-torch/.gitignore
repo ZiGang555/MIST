@@ -2,10 +2,11 @@
 __pycache__/
 *.py[cod]
 *$py.class
-
+dataset
 # C extensions
 *.so
-
+numpy
+01周琴琴
 # Distribution / packaging
 .Python
 build/

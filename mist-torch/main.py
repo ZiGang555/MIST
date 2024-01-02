@@ -13,7 +13,9 @@ from runtime.evaluate import evaluate
 from runtime.utils import create_empty_dir, set_seed, set_warning_levels, set_visible_devices, has_test_data, \
     get_files_df
 from inference.main_inference import test_time_inference, load_test_time_models
-
+import os
+gpu_id = '0,1,2,3,4,5,6,7'
+os.environ['CUDA_VISIBLE_DEVICES'] = gpu_id
 
 def create_folders(args):
     data_path = os.path.abspath(args.data)

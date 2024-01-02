@@ -54,23 +54,23 @@ def get_main_args():
           default="all",
           choices=["all", "analyze", "preprocess", "train"],
           help="Run all of the MIST pipeline or an individual component"),
-    p.arg("--data", type=str, help="Path to dataset json file")
+    p.arg("--data", type=str, default='dataset/dataset.json',help="Path to dataset json file")
     p.arg("--gpus", nargs="+", default=[-1], type=int, help="Which gpu(s) to use, defaults to all available GPUs")
     p.arg("--num-workers", type=positive_int, default=8, help="Number of workers to use for data loading")
     p.arg("--master-port", type=str, default="12355", help="Master port for multi-gpu training")
     p.arg("--seed", type=non_negative_int, default=42, help="Random seed")
-    p.boolean_flag("--tta", default=False, help="Enable test time augmentation")
+    p.boolean_flag("--tta", default=True, help="Enable test time augmentation")
 
     # Output
-    p.arg("--results", type=str, help="Path to output of MIST pipeline")
-    p.arg("--numpy", type=str, help="Path to save preprocessed numpy data")
+    p.arg("--results", type=str, default='results', help="Path to output of MIST pipeline")
+    p.arg("--numpy", type=str, default='numpy', help="Path to save preprocessed numpy data")
 
     # AMP
     p.boolean_flag("--amp", default=False, help="Enable automatic mixed precision (recommended)")
 
     # Training hyperparameters
-    p.arg("--batch-size", type=positive_int, default=2, help="Batch size")
-    p.arg("--patch-size", nargs="+", default=[64, 64, 64], type=int, help="Height, width, and depth of patch size to "
+    p.arg("--batch-size", type=positive_int, default=32, help="Batch size")
+    p.arg("--patch-size", nargs="+", default=[96, 160, 160], type=int, help="Height, width, and depth of patch size to "
                                                                           "use for cropping")
     p.arg("--learning-rate", type=float, default=0.001, help="Learning rate")
     p.arg("--exp_decay", type=float, default=0.9, help="Exponential decay factor")
@@ -92,7 +92,7 @@ def get_main_args():
     # Neural network parameters
     p.arg("--model",
           type=str,
-          default="nnunet",
+          default="unet",
           choices=["nnunet", "unet", "resnet", "densenet"])
     p.boolean_flag("--pocket", default=False, help="Use pocket version of network")
     p.arg("--depth", type=non_negative_int, help="Depth of U-Net or similar architecture")

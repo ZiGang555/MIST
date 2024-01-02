@@ -351,7 +351,7 @@ A complete list of available options and their descriptions, can be accessed by
 using ```-h``` or ```--help``` command-line option, for example:
 ```
 python predict.py --help
-
+predict.py --models results/models/ --config results/config.json --data results/test_paths.csv --output results/test
 usage: predict.py [-h] [--models MODELS] [--config CONFIG] [--data DATA]
                   [--output OUTPUT] [--fast [BOOLEAN]] [--gpu GPU]
                   [--sw-overlap SW_OVERLAP] [--blend-mode {constant,gaussian}]
@@ -383,10 +383,8 @@ If you have a set of predictions that you want to evaluate, then run the ```eval
 as follows:
 
 ```
-python eval_preds.py --data-json examples/brats.json \
---paths-csv /workspace/data/mist-examples/brats/new-data.csv \
---preds-dir /workspace/data/mist-examples/brats/results/predictions/test/ \ 
---output-csv /workspace/data/mist-examples/brats/results/results_test.csv
+python eval_preds.py --data-json dataset/dataset.json --paths results/test_paths.csv --preds-dir results/test --output-csv results/results_test.csv
+
 ```
 
 A full list of options for the evaluation scirpt is below.
