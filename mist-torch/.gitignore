@@ -6,6 +6,7 @@ dataset
 # C extensions
 *.so
 numpy
+config
 01周琴琴
 # Distribution / packaging
 .Python
