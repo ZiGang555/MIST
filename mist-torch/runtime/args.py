@@ -51,7 +51,7 @@ def get_main_args():
     # Runtime
     p.arg("--exec-mode",
           type=str,
-          default="all",
+          default="preprocess",
           choices=["all", "analyze", "preprocess", "train"],
           help="Run all of the MIST pipeline or an individual component"),
     p.arg("--data", type=str, default='dataset/dataset.json',help="Path to dataset json file")
@@ -63,14 +63,14 @@ def get_main_args():
 
     # Output
     p.arg("--results", type=str, default='results', help="Path to output of MIST pipeline")
-    p.arg("--numpy", type=str, default='numpy', help="Path to save preprocessed numpy data")
+    p.arg("--numpy", type=str, default='numpy/dtm_numpy', help="Path to save preprocessed numpy data")
 
     # AMP
     p.boolean_flag("--amp", default=False, help="Enable automatic mixed precision (recommended)")
 
     # Training hyperparameters
-    p.arg("--batch-size", type=positive_int, default=32, help="Batch size")
-    p.arg("--patch-size", nargs="+", default=[96, 160, 160], type=int, help="Height, width, and depth of patch size to "
+    p.arg("--batch-size", type=positive_int, default=8, help="Batch size")
+    p.arg("--patch-size", nargs="+", default=[96, 96, 96], type=int, help="Height, width, and depth of patch size to "
                                                                           "use for cropping")
     p.arg("--learning-rate", type=float, default=0.001, help="Learning rate")
     p.arg("--exp_decay", type=float, default=0.9, help="Exponential decay factor")
@@ -92,7 +92,7 @@ def get_main_args():
     # Neural network parameters
     p.arg("--model",
           type=str,
-          default="unet",
+          default="nnunet",
           choices=["nnunet", "unet", "resnet", "densenet"])
     p.boolean_flag("--pocket", default=False, help="Use pocket version of network")
     p.arg("--depth", type=non_negative_int, help="Depth of U-Net or similar architecture")
@@ -120,7 +120,7 @@ def get_main_args():
     # Loss function
     p.arg("--loss",
           type=str,
-          default="dice_ce",
+          default="gsl",
           choices=["dice_ce", "dice", "gdl", "gdl_ce", "bl", "hl", "gsl"],
           help="Loss function for training")
     p.arg("--alpha-scheduler",

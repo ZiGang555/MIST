@@ -16,7 +16,7 @@ def get_predict_args():
     p.arg("--data", type=str, help="CSV or JSON file containing paths to data")
     p.arg("--output", type=str, help="Directory to save predictions")
     p.boolean_flag("--fast", default=False, help="Use only one model for prediction to speed up inference time")
-    p.arg("--gpu", type=non_negative_int, default=0, help="GPU id to run inference on")
+    p.arg("--gpu", type=non_negative_int, default=5, help="GPU id to run inference on")
 
     p.arg("--sw-overlap",
           type=float_0_1,

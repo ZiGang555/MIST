@@ -57,7 +57,7 @@ class Trainer:
             self.data = json.load(file)
 
         # Get dataset configuration file
-        self.config_file = os.path.join(self.args.results, "config.json")
+        self.config_file = os.path.join('config', "config.json")
         with open(self.config_file, "r") as file:
             self.config = json.load(file)
 

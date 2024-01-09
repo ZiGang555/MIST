@@ -206,7 +206,7 @@ def preprocess_example(config, image_list, mask):
 
 def preprocess_dataset(args):
     # Get configuration file
-    config_file = os.path.join(args.results, 'config.json')
+    config_file = os.path.join('config', 'config.json')
 
     with open(config_file, 'r') as file:
         config = json.load(file)

@@ -85,7 +85,7 @@ def main(args):
             with torch.no_grad():
                 test_time_inference(test_df,
                                     os.path.join(args.results, "predictions", "test"),
-                                    os.path.join(args.results, "config.json"),
+                                    os.path.join('config', "config.json"),
                                     models,
                                     args.sw_overlap,
                                     args.blend_mode,

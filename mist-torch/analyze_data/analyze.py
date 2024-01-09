@@ -61,7 +61,7 @@ class Analyzer:
         self.train_paths_csv = os.path.join(self.output_dir, "train_paths.csv")
 
         # Set up configuration file
-        self.config_file = os.path.join(args.results, "config.json")
+        self.config_file = os.path.join('config', "config.json")
 
         self.config = dict()
         self.df = get_files_df(self.data, "train")

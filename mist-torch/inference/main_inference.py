@@ -232,7 +232,7 @@ def test_time_inference(df, dest, config_file, models, overlap, blend_mode, tta,
 
             original_image = ants.image_read(image_list[0])
 
-            image_npy, _, _ = preprocess_example(config, image_list, None)
+            image_npy, _, _ ,_= preprocess_example(config, image_list, None)
 
             # Make image channels first and add batch dimension
             image_npy = np.transpose(image_npy, axes=(3, 0, 1, 2))
