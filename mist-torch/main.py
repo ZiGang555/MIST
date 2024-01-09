@@ -66,7 +66,7 @@ def main(args):
         mist_trainer.fit()
 
         evaluate(args.data,
-                 os.path.join(args.results, "train_paths.csv"),
+                 os.path.join('config', "train_paths.csv"),
                  os.path.join(args.results, "predictions", "train", "raw"),
                  os.path.join(args.results, "results.csv"))
 
@@ -76,7 +76,7 @@ def main(args):
 
         if has_test_data(args.data):
             test_df = get_files_df(args.data, "test")
-            test_df.to_csv(os.path.join(args.results, "test_paths.csv"), index=False)
+            test_df.to_csv(os.path.join('config', "test_paths.csv"), index=False)
 
             models = load_test_time_models(os.path.join(args.results, "models"), False)
             models = [model.eval() for model in models]

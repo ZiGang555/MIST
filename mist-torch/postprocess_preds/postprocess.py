@@ -102,7 +102,7 @@ class Postprocessor:
         self.majority_label = get_majority_label(self.data["labels"], self.config["class_weights"])
 
         # Get paths to dataset
-        self.paths = pd.read_csv(os.path.join(self.args.results, "train_paths.csv"))
+        self.paths = pd.read_csv(os.path.join('config', "train_paths.csv"))
 
     def use_clean_mask(self):
         # Set output directory
@@ -129,7 +129,7 @@ class Postprocessor:
 
         # Evaluate new predictions
         evaluate(self.args.data,
-                 os.path.join(self.args.results, "train_paths.csv"),
+                 os.path.join('config', "train_paths.csv"),
                  output_dir,
                  results_csv)
 
@@ -175,7 +175,7 @@ class Postprocessor:
 
             # Evaluate new predictions
             evaluate(self.args.data,
-                     os.path.join(self.args.results, "train_paths.csv"),
+                     os.path.join('config', "train_paths.csv"),
                      output_dir,
                      results_csv)
 

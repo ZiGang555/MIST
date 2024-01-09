@@ -55,13 +55,13 @@ class Analyzer:
 
         self.labels = self.data["labels"]
         self.train_dir = os.path.abspath(self.data["train-data"])
-        self.output_dir = os.path.abspath(self.args.results)
+        self.output_dir = os.path.abspath('config')
 
         # Get paths to dataset
         self.train_paths_csv = os.path.join(self.output_dir, "train_paths.csv")
 
         # Set up configuration file
-        self.config_file = os.path.join(self.args.results, "config.json")
+        self.config_file = os.path.join(args.results, "config.json")
 
         self.config = dict()
         self.df = get_files_df(self.data, "train")

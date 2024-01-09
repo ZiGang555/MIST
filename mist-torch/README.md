@@ -351,7 +351,7 @@ A complete list of available options and their descriptions, can be accessed by
 using ```-h``` or ```--help``` command-line option, for example:
 ```
 python predict.py --help
-predict.py --models results/models/ --config results/config.json --data results/test_paths.csv --output results/test
+python predict.py --models results/unet/models --config results/unet/models/model_config.json --data results/test_paths.csv --output results/test
 usage: predict.py [-h] [--models MODELS] [--config CONFIG] [--data DATA]
                   [--output OUTPUT] [--fast [BOOLEAN]] [--gpu GPU]
                   [--sw-overlap SW_OVERLAP] [--blend-mode {constant,gaussian}]

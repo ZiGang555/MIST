@@ -1,6 +1,6 @@
 import argparse
 from argparse import ArgumentDefaultsHelpFormatter, ArgumentParser
-
+import os
 
 def positive_int(value):
     ivalue = int(value)
@@ -121,8 +121,22 @@ def get_main_args():
     p.arg("--loss",
           type=str,
           default="dice_ce",
-          choices=["dice_ce", "dice", "gdl", "gdl_ce"],
+          choices=["dice_ce", "dice", "gdl", "gdl_ce", "bl", "hl", "gsl"],
           help="Loss function for training")
+    p.arg("--alpha-scheduler",
+          type=str,
+          default="linear",
+          choices=["linear", "step", "cosine"],
+          help="Choice of alpha scheduler for boundary losses")
+    p.arg("--linear-schedule-pause",
+          type=positive_int,
+          default=5,
+          help="Number of epochs before linear alpha scheduler starts")
+    p.arg("--step-schedule-step-length",
+          type=positive_int,
+          default=5,
+          help="Number of epochs before in each section of the step-wise alpha scheduler")
+
 
     # Sliding window inference
     p.arg("--sw-overlap",
@@ -146,11 +160,13 @@ def get_main_args():
 
     # Validation
     p.arg("--nfolds", type=positive_int, default=5, help="Number of cross-validation folds")
-    p.arg("--folds", nargs="+", default=[0, 1, 2, 3, 4], type=int, help="Which folds to run")
-    p.arg("--epochs", type=positive_int, default=300, help="Number of epochs")
+    p.arg("--folds", nargs="+", default=[0], type=int, help="Which folds to run")
+    p.arg("--epochs", type=positive_int, default=500, help="Number of epochs")
     p.arg("--steps-per-epoch",
           type=positive_int,
           help="Steps per epoch. By default ceil(training_dataset_size / batch_size / gpus)")
 
     args = p.parse_args()
+    args.results = os.path.join(args.results, args.model)
+    args.results = os.path.join(args.results, args.loss)
     return args
