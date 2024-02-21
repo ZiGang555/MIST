@@ -54,6 +54,23 @@ def create_folders(args):
 def main(args):
     # Create file structure for MIST output
     create_folders(args)
+    if args.exec_mode =="test":
+         if has_test_data(args.data):
+            test_df = get_files_df(args.data, "test")
+            test_df.to_csv(os.path.join(args.results, "test_paths.csv"), index=False)
+
+            models = load_test_time_models(os.path.join(args.results, "models"), False)
+            models = [model.eval() for model in models]
+            models = [model.to("cuda") for model in models]
+
+            with torch.no_grad():
+                test_time_inference(test_df,
+                                    os.path.join(args.results, "predictions", "test"),
+                                    os.path.join(args.results, "config.json"),
+                                    models,
+                                    args.sw_overlap,
+                                    args.blend_mode,
+                                    args.tta)
     if args.exec_mode == "all" or args.exec_mode == "analyze":
         analyze = Analyzer(args)
         analyze.run()
