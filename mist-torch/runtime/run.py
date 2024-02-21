@@ -282,6 +282,9 @@ class Trainer:
                     if self.args.loss in ["bl", "hl", "gsl"]:
                         alpha = self.alpha(epoch)
                         loss = loss_fn(label, output["prediction"], dtm, alpha)
+                    elif self.args.loss in ["myloss"]:
+                        alpha = self.alpha(epoch)
+                        loss = loss_fn(label, output["prediction"], output["edge"], dtm, alpha)
                     else:
                         loss = loss_fn(label, output["prediction"])
 

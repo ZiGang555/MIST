@@ -51,7 +51,7 @@ def get_main_args():
     # Runtime
     p.arg("--exec-mode",
           type=str,
-          default="preprocess",
+          default="train",
           choices=["all", "analyze", "preprocess", "train"],
           help="Run all of the MIST pipeline or an individual component"),
     p.arg("--data", type=str, default='dataset/dataset.json',help="Path to dataset json file")
@@ -93,7 +93,7 @@ def get_main_args():
     p.arg("--model",
           type=str,
           default="nnunet",
-          choices=["nnunet", "unet", "resnet", "densenet"])
+          choices=["nnunet", "unet", "resnet", "densenet","donet"])
     p.boolean_flag("--pocket", default=False, help="Use pocket version of network")
     p.arg("--depth", type=non_negative_int, help="Depth of U-Net or similar architecture")
     p.arg("--init-filters", type=non_negative_int, default=32, help="Number of filters to start network")
@@ -120,8 +120,8 @@ def get_main_args():
     # Loss function
     p.arg("--loss",
           type=str,
-          default="gsl",
-          choices=["dice_ce", "dice", "gdl", "gdl_ce", "bl", "hl", "gsl"],
+          default="dice_ce",
+          choices=["dice_ce", "dice", "gdl", "gdl_ce", "bl", "hl", "gsl","myloss"],
           help="Loss function for training")
     p.arg("--alpha-scheduler",
           type=str,

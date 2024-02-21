@@ -320,6 +320,11 @@ python predict.py --models /workspace/data/mist-examples/brats/results/models \
 --config /workspace/data/mist-examples/brats/results/config.json \
 --data /workspace/data/mist-examples/brats/new-data.csv \
 --output /workspace/data/mist-examples/brats/new-data-predictions
+
+python predict.py --models results/hospital/nnunet/dice_ce/models \
+--config config/config.json \
+--data config/train_paths.csv \
+--output results/hospital/nnunet/dice_ce/predictions
 ```
 
 MIST supports two formats for test data: CSV and JSON. For CSV formatted data, the CSV file must,
