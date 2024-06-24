@@ -34,7 +34,7 @@ from monai.inferers import sliding_window_inference
 # Custom code
 from data_loading.dali_loader import get_training_dataset, get_validation_dataset, get_test_dataset
 from models.get_model import get_model
-from runtime.loss import get_loss, DiceLoss, VAELoss
+from runtime.loss import get_loss, DiceCELoss, VAELoss
 from inference.main_inference import predict_single_example
 from runtime.utils import (
     get_optimizer,
@@ -65,7 +65,7 @@ class Trainer:
         self.n_classes = len(self.data["labels"])
 
         # Get paths to dataset
-        self.df = pd.read_csv(os.path.join('config', "train_paths.csv"))
+        self.df = pd.read_csv(os.path.join(args.config, "train_paths.csv"))
 
         # Get patch size if not specified by user
         self.patch_size = self.args.patch_size
@@ -99,7 +99,7 @@ class Trainer:
             self.class_weights = None
 
         # Get standard dice loss for validation
-        self.val_loss = DiceLoss()
+        self.val_loss = DiceCELoss()
 
         # Get VAE regularization loss
         self.vae_loss = VAELoss()
@@ -136,7 +136,7 @@ class Trainer:
                 image = data["image"]
 
                 # Predict with model and put back into original image space
-                pred = predict_single_example(image,
+                pred, _ = predict_single_example(image,
                                               original_image,
                                               self.config,
                                               [model],
@@ -177,6 +177,7 @@ class Trainer:
 
         labels_dir = os.path.join(self.args.numpy, 'labels')
         labels = [os.path.join(labels_dir, file) for file in os.listdir(labels_dir)]
+        # edges = labels
 
         dtms_dir = os.path.join(self.args.numpy, 'dtms')
         dtms = [os.path.join(dtms_dir, file) for file in os.listdir(dtms_dir)]
@@ -199,6 +200,7 @@ class Trainer:
         for fold in self.args.folds:
             train_images = [images[idx] for idx in train_splits[fold]]
             train_labels = [labels[idx] for idx in train_splits[fold]]
+            # train_edges = [labels[idx] for idx in train_splits[fold]]
             train_dtms = [dtms[idx] for idx in train_splits[fold]]
             zip_labels_dtms = [vol for vol in zip(train_labels, train_dtms)]
 
@@ -207,7 +209,7 @@ class Trainer:
                                                                                             zip_labels_dtms,
                                                                                             test_size=0.1,
                                                                                             random_state=self.args.seed)
-
+            # val_images
             train_labels = [vol[0] for vol in train_labels_dtms]
             train_dtms = [vol[1] for vol in train_labels_dtms]
             val_labels = [vol[0] for vol in val_labels_dtms]

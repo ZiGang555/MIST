@@ -1,5 +1,6 @@
 import torch
 import torch.nn as nn
+import numpy as np
 from torch.nn.functional import softmax, one_hot
 
 
@@ -150,7 +151,23 @@ class BoundaryLoss(nn.Module):
 
         return alpha*region_loss + (1. - alpha)*boundary_loss
 
+class OHEMLoss(nn.CrossEntropyLoss):
+    """
+    Network has to have NO LINEARITY!
+    """
+    def __init__(self, loss, weight=None, ignore_index=-100, k=0.7):
+        super(OHEMLoss, self).__init__()
+        self.k = k
+        self.weight = weight
+        self.ignore_index = ignore_index
+        self.loss = loss
 
+    def forward(self, y_pred, y_true):
+        res = self.loss(y_pred, y_true)
+        num_voxels = np.prod(res.shape, dtype=np.int64)
+        res, _ = torch.topk(res.view((-1, )), int(num_voxels * self.k), sorted=False)
+        return res.mean()
+    
 class HDOneSidedLoss(nn.Module):
     def __init__(self):
         super(HDOneSidedLoss, self).__init__()
@@ -237,8 +254,8 @@ class MyLoss(nn.Module):
         region_loss = self.region_loss(y_true, y_pred)
 
         # Prepare inputs
-        y_true = get_one_hot(y_true, y_pred.shape[1])
-        y_pred = softmax(y_pred, dim=1)
+        y_true = get_one_hot(y_true, edge_pred.shape[1])
+        edge_pred = softmax(edge_pred, dim=1)
 
         if self.class_weights is None:
             class_weights = torch.sum(y_true, dim=self.axes)

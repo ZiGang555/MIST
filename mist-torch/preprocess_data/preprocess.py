@@ -215,7 +215,7 @@ def preprocess_dataset(args):
         warnings.warn("N4 bias correction should not be used for modality {}".format(config["modality"]))
 
     # Get paths to dataset
-    df = pd.read_csv(os.path.join('config', 'train_paths.csv'))
+    df = pd.read_csv(os.path.join(args.config, 'train_paths.csv'))
 
     # Create output directories if they do not exist
     images_dir = os.path.join(args.numpy, 'images')

@@ -14,7 +14,7 @@ import torch.nn as nn
 
 from models.get_model import get_model
 from metrics.metrics import dice_sitk, hausdorff, surface_hausdorff
-
+pd.set_option('display.max_colwidth', 300)
 
 def set_warning_levels():
     warnings.simplefilter(action='ignore',
@@ -90,6 +90,22 @@ def get_test_df(df, test_df_ids):
         for key in row_dict.keys():
             row_dict[key] = str(row_dict[key][0])
         test_df = pd.concat([test_df, pd.DataFrame(row_dict, index=[0])], ignore_index=True)
+    return test_df
+
+def get_test_df_backup(df, test_df_ids):
+    test_df = pd.DataFrame(columns=df.columns)
+    for patient in test_df_ids:
+        # original_mask = ants.image_read(paths.loc[paths['id'].astype(int)  == int(patient_id)].iloc[0]['mask'])
+        row_dict = df.loc[df['id'].astype(int).isin([patient])].to_dict("list")
+        for key in row_dict.keys():
+            if row_dict[key]:  # 如果列表不为空
+                row_dict[key] = str(row_dict[key][0])  # 取列表的第一个元素并转换为字符串
+            else:
+                break
+                # row_dict[key] = None  # 如果列表为空，则分配一个None值或者你希望的任何默认值
+            # row_dict[key] = str(row_dict[key][0])
+        if row_dict[key]:
+            test_df = pd.concat([test_df, pd.DataFrame(row_dict, index=[0])], ignore_index=True)
     return test_df
 
 

@@ -58,7 +58,7 @@ class Analyzer:
         self.output_dir = os.path.abspath('config')
 
         # Get paths to dataset
-        self.train_paths_csv = os.path.join(self.output_dir, "train_paths.csv")
+        self.train_paths_csv = os.path.join(args.config, "train_paths.csv")
 
         # Set up configuration file
         self.config_file = os.path.join('config', "config.json")

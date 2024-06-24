@@ -52,18 +52,37 @@ def get_main_args():
     p.arg("--exec-mode",
           type=str,
           default="train",
-          choices=["all", "analyze", "preprocess", "train"],
+          choices=["all", "analyze", "preprocess", "train", "test", "eval"],
           help="Run all of the MIST pipeline or an individual component"),
+    p.arg("--loss",
+          type=str,
+          default="dice_ce",
+          choices=["dice_ce", "dice", "gdl", "gdl_ce", "bl", "hl", "gsl","myloss"],
+          help="Loss function for training")
+    p.arg("--model",
+          type=str,
+          default="unet",
+          choices=["nnunet", "unet", "resnet", "densenet","donet"])
+    p.arg("--oversampling",
+          type=float_0_1,
+          default=0.3,
+          help="Probability of crop centered on foreground voxel")
+    p.arg("--folds", nargs="+", default=[0], type=int, help="Which folds to run")
+    p.arg("--epochs", type=positive_int, default=500, help="Number of epochs")
+    p.arg("--numpy", type=str, default='numpy/dtm_numpy', help="Path to save preprocessed numpy data")
+
+
     p.arg("--data", type=str, default='dataset/dataset.json',help="Path to dataset json file")
+    p.arg("--config", type=str, default='config',help="Path to config json file")
     p.arg("--gpus", nargs="+", default=[-1], type=int, help="Which gpu(s) to use, defaults to all available GPUs")
     p.arg("--num-workers", type=positive_int, default=8, help="Number of workers to use for data loading")
-    p.arg("--master-port", type=str, default="12355", help="Master port for multi-gpu training")
+    p.arg("--master-port", type=str, default="12356", help="Master port for multi-gpu training")
     p.arg("--seed", type=non_negative_int, default=42, help="Random seed")
     p.boolean_flag("--tta", default=True, help="Enable test time augmentation")
 
     # Output
     p.arg("--results", type=str, default='results', help="Path to output of MIST pipeline")
-    p.arg("--numpy", type=str, default='numpy/dtm_numpy', help="Path to save preprocessed numpy data")
+    
 
     # AMP
     p.boolean_flag("--amp", default=False, help="Enable automatic mixed precision (recommended)")
@@ -90,12 +109,9 @@ def get_main_args():
     p.arg("--clip-norm-max", type=float, default=1.0, help="Max threshold for global norm clipping")
 
     # Neural network parameters
-    p.arg("--model",
-          type=str,
-          default="nnunet",
-          choices=["nnunet", "unet", "resnet", "densenet","donet"])
+
     p.boolean_flag("--pocket", default=False, help="Use pocket version of network")
-    p.arg("--depth", type=non_negative_int, help="Depth of U-Net or similar architecture")
+    p.arg("--depth", default=4, type=non_negative_int, help="Depth of U-Net or similar architecture")
     p.arg("--init-filters", type=non_negative_int, default=32, help="Number of filters to start network")
     p.boolean_flag("--deep-supervision", default=False, help="Use deep supervision")
     p.arg("--deep-supervision-heads", type=positive_int, default=2, help="Number of deep supervision heads")
@@ -107,10 +123,7 @@ def get_main_args():
     p.arg("--l1-penalty", type=float_0_1, default=0.00001, help="L1 penalty")
 
     # Data loading
-    p.arg("--oversampling",
-          type=float_0_1,
-          default=0.40,
-          help="Probability of crop centered on foreground voxel")
+
 
     # Preprocessing
     p.boolean_flag("--use-n4-bias-correction", default=False, help="Use N4 bias field correction (only for MR images)")
@@ -118,11 +131,7 @@ def get_main_args():
     p.arg("--class-weights", nargs="+", type=float, help="Specify class weights")
 
     # Loss function
-    p.arg("--loss",
-          type=str,
-          default="dice_ce",
-          choices=["dice_ce", "dice", "gdl", "gdl_ce", "bl", "hl", "gsl","myloss"],
-          help="Loss function for training")
+
     p.arg("--alpha-scheduler",
           type=str,
           default="linear",
@@ -150,7 +159,7 @@ def get_main_args():
           help="How to blend output of overlapping windows")
 
     # Postprocessing
-    p.boolean_flag("--postprocess", default=False, help="Run post processing on MIST output")
+    p.boolean_flag("--postprocess", default=True, help="Run post processing on MIST output")
     p.boolean_flag("--post-no-morph",
                    default=False,
                    help="Do not try morphological smoothing for postprocessing")
@@ -160,8 +169,7 @@ def get_main_args():
 
     # Validation
     p.arg("--nfolds", type=positive_int, default=5, help="Number of cross-validation folds")
-    p.arg("--folds", nargs="+", default=[0], type=int, help="Which folds to run")
-    p.arg("--epochs", type=positive_int, default=500, help="Number of epochs")
+
     p.arg("--steps-per-epoch",
           type=positive_int,
           help="Steps per epoch. By default ceil(training_dataset_size / batch_size / gpus)")

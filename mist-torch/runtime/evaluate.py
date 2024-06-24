@@ -49,7 +49,7 @@ def evaluate(data_json, paths, source_dir, output_csv):
             # Get true mask and original_prediction
             patient_id = predictions[i].split('.')[0]
             pred = ants.image_read(os.path.join(source_dir, predictions[i]))
-            original_mask = ants.image_read(paths.loc[paths['id'].astype(str) == patient_id].iloc[0]['mask'])
+            original_mask = ants.image_read(paths.loc[paths['id'].astype(int)  == int(patient_id)].iloc[0]['mask'])
 
             eval_results = evaluate_prediction(pred,
                                                original_mask,
@@ -65,3 +65,4 @@ def evaluate(data_json, paths, source_dir, output_csv):
 
     results_df = compute_results_stats(results_df)
     results_df.to_csv(output_csv, index=False)
+    print("结果输出到:",output_csv)

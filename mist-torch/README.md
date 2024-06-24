@@ -321,10 +321,10 @@ python predict.py --models /workspace/data/mist-examples/brats/results/models \
 --data /workspace/data/mist-examples/brats/new-data.csv \
 --output /workspace/data/mist-examples/brats/new-data-predictions
 
-python predict.py --models results/hospital/nnunet/dice_ce/models \
---config config/config.json \
---data config/train_paths.csv \
---output results/hospital/nnunet/dice_ce/predictions
+python predict.py --models results/nnunet/dice_ce/models \
+--config results/nnunet/dice_ce/models/model_config.json \
+--data config/test_paths.csv \
+--output results/nnunet/dice_ce/predictions
 ```
 
 MIST supports two formats for test data: CSV and JSON. For CSV formatted data, the CSV file must,
@@ -388,7 +388,7 @@ If you have a set of predictions that you want to evaluate, then run the ```eval
 as follows:
 
 ```
-python eval_preds.py --data-json dataset/dataset.json --paths results/test_paths.csv --preds-dir results/test --output-csv results/results_test.csv
+python eval_preds.py --data-json dataset/dataset.json --paths config/test_paths.csv --preds-dir results/nnunet/dice_ce/predictions --output-csv results/results_debug.csv
 
 ```
 

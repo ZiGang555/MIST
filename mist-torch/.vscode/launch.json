@@ -1,0 +1,38 @@
+{
+    "configurations": [
+        {
+            "name": "main",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "main.py",
+            "console": "integratedTerminal",
+            "args": [
+                "--master-port",
+                "12357",
+                "--batch-size",
+                "1",
+                "--model",
+                "donet",
+                "--exec-mode",
+                "train"
+            ]
+        },
+        {
+            "name": "Python 调试程序: 当前文件",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "predict.py",
+            "console": "integratedTerminal",
+            "args": [
+                "--models",
+                "results/nnunet/dice_ce/models",
+                "--config",
+                "config/config.json",
+                "--data",
+                "config/test_paths.csv",
+                "--output",
+                "results/hospital/nnunet/dice_ce/predictions"
+            ]
+        }
+    ]
+}

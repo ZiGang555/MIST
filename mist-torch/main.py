@@ -14,7 +14,7 @@ from runtime.utils import create_empty_dir, set_seed, set_warning_levels, set_vi
     get_files_df
 from inference.main_inference import test_time_inference, load_test_time_models
 import os
-gpu_id = '4,5,6,7'
+gpu_id = '0,1,2,3'
 os.environ['CUDA_VISIBLE_DEVICES'] = gpu_id
 
 def create_folders(args):
@@ -57,20 +57,34 @@ def main(args):
     if args.exec_mode =="test":
          if has_test_data(args.data):
             test_df = get_files_df(args.data, "test")
-            test_df.to_csv(os.path.join(args.results, "test_paths.csv"), index=False)
+            test_df.to_csv(os.path.join(args.config, "test_paths.csv"), index=False)
 
             models = load_test_time_models(os.path.join(args.results, "models"), False)
             models = [model.eval() for model in models]
             models = [model.to("cuda") for model in models]
-
+            
             with torch.no_grad():
                 test_time_inference(test_df,
-                                    os.path.join(args.results, "predictions", "test"),
-                                    os.path.join(args.results, "config.json"),
+                                    os.path.join(args.results, "predictions","test"),
+                                    os.path.join(args.config, "config.json"),
                                     models,
                                     args.sw_overlap,
                                     args.blend_mode,
                                     args.tta)
+            
+            evaluate(args.data,
+                 os.path.join(args.config, "test_paths.csv"),
+                 os.path.join(args.results, "predictions","test"),
+                 os.path.join(args.results, "results.csv"))
+    if args.exec_mode =="eval":
+        # test_df = get_files_df(args.data, "test")
+        # test_df.to_csv(os.path.join(args.config, "test_paths.csv"), index=False)
+
+        evaluate(args.data,
+                 os.path.join(args.config, "test_paths.csv"),
+                 os.path.join(args.results, "predictions","test"),
+                 os.path.join(args.results, "results.csv"))
+                 
     if args.exec_mode == "all" or args.exec_mode == "analyze":
         analyze = Analyzer(args)
         analyze.run()
@@ -83,7 +97,7 @@ def main(args):
         mist_trainer.fit()
 
         evaluate(args.data,
-                 os.path.join('config', "train_paths.csv"),
+                 os.path.join(args.config, "train_paths.csv"),
                  os.path.join(args.results, "predictions", "train", "raw"),
                  os.path.join(args.results, "results.csv"))
 
@@ -93,7 +107,7 @@ def main(args):
 
         if has_test_data(args.data):
             test_df = get_files_df(args.data, "test")
-            test_df.to_csv(os.path.join('config', "test_paths.csv"), index=False)
+            test_df.to_csv(os.path.join(args.config, "test_paths.csv"), index=False)
 
             models = load_test_time_models(os.path.join(args.results, "models"), False)
             models = [model.eval() for model in models]
